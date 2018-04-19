@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using BTree;
+using Proyecto_ED1.DBContext;
 
 namespace Proyecto_ED1.Models
 {
     public class Usuario
     {
+        private static Comparador comparer = new Comparador();
+
         /// <summary>
         /// Constructor de la clase Usuario
         /// </summary>
@@ -18,6 +22,7 @@ namespace Proyecto_ED1.Models
             Username = default(string);
             Password = default(string);
             Administrador = false;
+            WatchList = new Btree<Producto>(5, comparer.CompareByName);
         }
 
         /// <summary>
@@ -35,6 +40,7 @@ namespace Proyecto_ED1.Models
             Edad = edad;
             Username = username;
             Password = password;
+            WatchList = new Btree<Producto>(5, comparer.CompareByName);
         }
 
 
@@ -44,7 +50,9 @@ namespace Proyecto_ED1.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public bool Administrador { get; set; }
-        //Arbol con la WatchList
+        public Btree<Producto> WatchList { get; set; }
+
+        
 
         /// <summary>
         /// Función para validar el ingreso a la plataforma

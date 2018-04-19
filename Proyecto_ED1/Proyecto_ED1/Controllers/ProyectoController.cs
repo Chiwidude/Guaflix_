@@ -5,29 +5,35 @@ using System.Web;
 using System.Web.Mvc;
 using Proyecto_ED1.DBContext;
 using Proyecto_ED1.Models;
+using System.Net;
 
 namespace Proyecto_ED1.Controllers
 {
     public class ProyectoController : Controller
     {
         public DefaultConnection db = DefaultConnection.getInstance;
-        Usuario prueba = new Usuario("Angel", "Jimenez", 18, "est1032517", "yomero");
+        public Usuario Temp_ = new Usuario();
+        /*Usuario prueba = new Usuario("Angel", "Jimenez", 18, "est1032517", "yomero");
         Usuario prueba1 = new Usuario("Diego", "Jimenez", 18, "Alejandro", "hermano");
         Usuario prueba2 = new Usuario("Roberto", "Jimenez", 18, "Angel", "papa");
-        Usuario prueba3 = new Usuario("Oscar", "Jimenez", 18, "Castro", "amigo");
+        Usuario prueba3 = new Usuario("Oscar", "Jimenez", 18, "Castro", "amigo");*/
         // GET: Proyecto
         public ActionResult IndexUsuario()
         {
-            return View(db.Catalogo);
+            return View(db.ArbolPorNombre.ToList());
         }
 
         public ActionResult IndexAdministrador()
         {
-            return View(db.Catalogo);
+            return View(db.ArbolPorNombre.ToList());
         }
 
         public ActionResult Login()
         {
+            if (db.ArbolUsuarios.ToList().Count == 0)
+            {
+                return RedirectToAction("Signin");
+            }
             return View();
         }
 
@@ -35,27 +41,32 @@ namespace Proyecto_ED1.Controllers
         public ActionResult Login([Bind(Include ="Username,Password")]Models.Usuario usuario)
         {
             //Solo es de prueba
-            db.CargarUsuario(prueba);
+            /*db.CargarUsuario(prueba);
             db.CargarUsuario(prueba1);
             db.CargarUsuario(prueba2);
-            db.CargarUsuario(prueba3);
+            db.CargarUsuario(prueba3);*/
+
+            List<Models.Usuario> Listado = db.ArbolUsuarios.ToList();
 
             bool Encontrado = false;
             if (usuario.Username != default(string) && usuario.Password != default(string))
             {
-                for (int i = 0; i < db.Usuarios.Count; i++)
+                for (int i = 0; i < Listado.Count; i++)
                 {
-                    db.Usuarios[i].Ingreso(usuario.Username, usuario.Password, ref Encontrado);
+                    Listado[i].Ingreso(usuario.Username, usuario.Password, ref Encontrado);
 
                     if (Encontrado == true)
                     {
-                        usuario = db.Usuarios[i];
+                        usuario = Listado[i];
+                        Temp_ = usuario;
                         if (usuario.Administrador)
                             return RedirectToAction("IndexAdministrador");
                         else
                             return RedirectToAction("IndexUsuario");
                     }
                 }
+
+                
 
                 return View();
             }
@@ -70,13 +81,18 @@ namespace Proyecto_ED1.Controllers
         [HttpPost]
         public ActionResult Signin([Bind(Include = "Nombre,Apellido,Edad,Username,Password")]Models.Usuario usuario)
         {
-            if (ModelState.IsValid)
+            if (usuario.Nombre != default(string) && usuario.Apellido != default(string) &&
+                usuario.Edad != default(int) && usuario.Username != default(string) && usuario.Password != default(string))
             {
-                db.CargarUsuario(usuario);
-                if (usuario.Administrador)
-                    return RedirectToAction("IndexAdministrador");
-                else
-                    return RedirectToAction("IndexUsuario");
+                if (ModelState.IsValid)
+                {
+                    db.CargarUsuario(usuario);
+                    Temp_ = usuario;
+                    if (usuario.Administrador)
+                        return RedirectToAction("IndexAdministrador");
+                    else
+                        return RedirectToAction("IndexUsuario");
+                }
             }
 
             return View(usuario);
@@ -85,16 +101,27 @@ namespace Proyecto_ED1.Controllers
 
         public ActionResult WatchList()
         {
+            return View(Temp_.WatchList.ToList());
+        }
+
+        public ActionResult AgregarWatchList(Producto id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            return View(id);
+        }
+
+        [HttpPost,ActionName(nameof(AgregarWatchList))]
+        [ValidateAntiForgeryToken]
+        public ActionResult AgreWatchList(Producto id)
+        {
+            Temp_.WatchList.Insertar(id);
             return RedirectToAction("IndexUsuario");
         }
-
-
-        // GET: Proyecto/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
+        
         // GET: Proyecto/Create
         public ActionResult CrearProducto()
         {
@@ -103,15 +130,23 @@ namespace Proyecto_ED1.Controllers
 
         // POST: Proyecto/Create
         [HttpPost]
-        public ActionResult CrearProducto(FormCollection collection)
+        public ActionResult CrearProducto([Bind(Include ="Tipo,Nombre,aLanzamiento,Genero")]Models.Producto producto)
         {
             try
             {
-                // TODO: Add insert logic here
+                if (ModelState.IsValid)
+                {
+                    db.ArbolPorNombre.Insertar(producto);
+                    db.ArbolPorGenero.Insertar(producto);
+                    db.ArbolPorALanzamiento.Insertar(producto);
+                    Temp_.WatchList.Insertar(producto);
+
+                    return RedirectToAction("IndexAdministrador");
+                }
 
                 return RedirectToAction("Index");
             }
-            catch
+            catch(Exception)
             {
                 return View();
             }

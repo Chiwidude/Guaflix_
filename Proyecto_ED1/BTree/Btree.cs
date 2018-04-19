@@ -249,6 +249,7 @@ namespace BTree
 
         public List<T> ToList()
         {
+            list = new Lazy<List<T>>();
             Inorder(root);
             return list.Value;
         }

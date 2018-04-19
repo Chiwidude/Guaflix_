@@ -14,13 +14,14 @@ namespace Proyecto_ED1.DBContext
         private static object sync = new Object();
 
         public List<Producto> Catalogo = new List<Producto>();
-        public List<Usuario> Usuarios = new List<Usuario>();
+        
         private static Comparador comparer = new Comparador();
         public Btree<Producto> ArbolPorNombre = new Btree<Producto>(5, comparer.CompareByName);
         public Btree<Producto> ArbolPorGenero = new Btree<Producto>(5, comparer.CompareByGenre);
         public Btree<Producto> ArbolPorALanzamiento = new Btree<Producto>(5, comparer.CompareByYear);
         public Btree<Usuario> ArbolUsuarios = new Btree<Usuario>(5, comparer.CompareByName);
         private int nUsuarios = 0;
+
 
         public void CargarUsuario(Usuario uTemp_)
         {
@@ -29,7 +30,7 @@ namespace Proyecto_ED1.DBContext
                 uTemp_.Administrador = true;
             }
 
-            Usuarios.Add(uTemp_);
+            ArbolUsuarios.Insertar(uTemp_);
             nUsuarios++;
         }
 

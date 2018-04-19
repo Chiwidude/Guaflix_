@@ -1,14 +1,13 @@
 ﻿@model IEnumerable<Proyecto_ED1.Models.Producto>
 
 @{
-    ViewBag.Title = "IndexAdministrador";
+    ViewBag.Title = "WatchList";
 }
 
-<h2>Index Administrador</h2>
+<h2>WatchList</h2>
 
 <p>
-    @Html.ActionLink("Agregar", "CrearProducto","Proyecto") | 
-    @Html.ActionLink("Carga desde JSON","CargaCatalogo","Proyecto")
+    @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
     <tr>
