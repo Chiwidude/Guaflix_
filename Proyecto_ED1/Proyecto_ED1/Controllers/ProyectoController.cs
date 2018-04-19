@@ -12,7 +12,7 @@ namespace Proyecto_ED1.Controllers
     public class ProyectoController : Controller
     {
         public DefaultConnection db = DefaultConnection.getInstance;
-        public Usuario Temp_ = new Usuario();
+        
         /*Usuario prueba = new Usuario("Angel", "Jimenez", 18, "est1032517", "yomero");
         Usuario prueba1 = new Usuario("Diego", "Jimenez", 18, "Alejandro", "hermano");
         Usuario prueba2 = new Usuario("Roberto", "Jimenez", 18, "Angel", "papa");
@@ -58,7 +58,7 @@ namespace Proyecto_ED1.Controllers
                     if (Encontrado == true)
                     {
                         usuario = Listado[i];
-                        Temp_ = usuario;
+                        db.Temp_ = usuario;
                         if (usuario.Administrador)
                             return RedirectToAction("IndexAdministrador");
                         else
@@ -87,7 +87,7 @@ namespace Proyecto_ED1.Controllers
                 if (ModelState.IsValid)
                 {
                     db.CargarUsuario(usuario);
-                    Temp_ = usuario;
+                    db.Temp_ = usuario;
                     if (usuario.Administrador)
                         return RedirectToAction("IndexAdministrador");
                     else
@@ -101,24 +101,28 @@ namespace Proyecto_ED1.Controllers
 
         public ActionResult WatchList()
         {
-            return View(Temp_.WatchList.ToList());
+            return View(db.Temp_.WatchList.ToList());
         }
 
-        public ActionResult AgregarWatchList(Producto id)
+        public ActionResult AgregarWatchList(string _nombre, string _tipo, string _alanzamiento, string _genero)
         {
-            if (id == null)
+            Producto producto = new Producto(_tipo, _nombre, Convert.ToInt32(_alanzamiento), _genero);
+
+            if (producto == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            return View(id);
+            return View(producto);
         }
 
         [HttpPost,ActionName(nameof(AgregarWatchList))]
         [ValidateAntiForgeryToken]
-        public ActionResult AgreWatchList(Producto id)
+        public ActionResult AgreWatchList(string _nombre, string _tipo, string _alanzamiento, string _genero)
         {
-            Temp_.WatchList.Insertar(id);
+            Producto producto = new Producto(_tipo, _nombre, Convert.ToInt32(_alanzamiento), _genero);
+            db.Temp_.WatchList.Insertar(producto);
+
             return RedirectToAction("IndexUsuario");
         }
         
@@ -139,7 +143,7 @@ namespace Proyecto_ED1.Controllers
                     db.ArbolPorNombre.Insertar(producto);
                     db.ArbolPorGenero.Insertar(producto);
                     db.ArbolPorALanzamiento.Insertar(producto);
-                    Temp_.WatchList.Insertar(producto);
+                    db.Temp_.WatchList.Insertar(producto);
 
                     return RedirectToAction("IndexAdministrador");
                 }

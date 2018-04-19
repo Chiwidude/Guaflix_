@@ -41,7 +41,7 @@
             @Html.DisplayFor(modelItem => item.Genero)
         </td>
         <td>
-            @Html.ActionLink("Añadir", "AgregarWatchList", new { id=item }) |
+            @Html.ActionLink("Añadir", "AgregarWatchList", new { _nombre = item.Nombre, _tipo = item.Tipo, _alanzamiento = item.aLanzamiento.ToString(), _genero = item.Genero }) |
             @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
             @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
         </td>
