@@ -36,5 +36,10 @@ namespace Proyecto_ED1.DBContext
                 return comparison == 0 ? CompareByName(pelicula1, pelicula2) : comparison;
             }
         }
+
+        public int CompareByName(Usuario user1, Usuario user2)
+        {
+            return user1 == null || user2 == null ? 1 : user1.Username.CompareTo(user2.Username);
+        }
     }
 }

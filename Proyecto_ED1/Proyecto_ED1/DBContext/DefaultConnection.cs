@@ -19,6 +19,7 @@ namespace Proyecto_ED1.DBContext
         public Btree<Producto> ArbolPorNombre = new Btree<Producto>(5, comparer.CompareByName);
         public Btree<Producto> ArbolPorGenero = new Btree<Producto>(5, comparer.CompareByGenre);
         public Btree<Producto> ArbolPorALanzamiento = new Btree<Producto>(5, comparer.CompareByYear);
+        public Btree<Usuario> ArbolUsuarios = new Btree<Usuario>(5, comparer.CompareByName);
         private int nUsuarios = 0;
 
         public void CargarUsuario(Usuario uTemp_)
