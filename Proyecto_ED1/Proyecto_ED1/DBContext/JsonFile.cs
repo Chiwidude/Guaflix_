@@ -9,6 +9,11 @@ namespace Proyecto_ED1.DBContext
 {
     public class JsonFile
     {
+        /// <summary>
+        /// Lee un archivo Json, donde se encuentran los productos de la app
+        /// </summary>
+        /// <param name="path"></param> Dirección donde se encuentra el archivo
+        /// <returns></returns> arreglo con los objetos convertidos
         public Producto[] ProductoList(Stream path)
         {
             Producto[] array;
@@ -29,7 +34,10 @@ namespace Proyecto_ED1.DBContext
             }
 
         }
-
+        /// <summary>
+        /// Convierte una lista de usuarios y los escribe en un archivo Json
+        /// </summary>
+        /// <param name="user"></param> Lista de usuarios registrados
         public void UserToJson(List<Usuario> user)
         {
             try
@@ -48,7 +56,11 @@ namespace Proyecto_ED1.DBContext
                 throw ex;
             }
         }
-
+        /// <summary>
+        /// Se lee un Json, con un listado de Usuarios Registrados
+        /// </summary>
+        /// <param name="Path"></param>
+        /// <returns></returns> Lista de Usuarios leidos
         public List<Usuario> UsersToList(Stream Path)
         {
             List<Usuario> array;
