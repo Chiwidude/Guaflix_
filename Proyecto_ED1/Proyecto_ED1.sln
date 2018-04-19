@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proyecto_ED1", "Proyecto_ED1\Proyecto_ED1.csproj", "{590D2856-0AE2-4210-B532-A29C68E39E6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTree", "BTree\BTree.csproj", "{E38F4F55-2698-481C-AE70-73DCAFE1ED60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{590D2856-0AE2-4210-B532-A29C68E39E6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{590D2856-0AE2-4210-B532-A29C68E39E6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{590D2856-0AE2-4210-B532-A29C68E39E6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E38F4F55-2698-481C-AE70-73DCAFE1ED60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E38F4F55-2698-481C-AE70-73DCAFE1ED60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E38F4F55-2698-481C-AE70-73DCAFE1ED60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E38F4F55-2698-481C-AE70-73DCAFE1ED60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4B3F48CC-3598-45CA-807F-044FD293E87B}
 	EndGlobalSection
 EndGlobal

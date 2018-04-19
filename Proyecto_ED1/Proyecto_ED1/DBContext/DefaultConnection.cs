@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Proyecto_ED1.Models;
+using BTree;
+
 
 namespace Proyecto_ED1.DBContext
 {
@@ -13,6 +15,10 @@ namespace Proyecto_ED1.DBContext
 
         public List<Producto> Catalogo = new List<Producto>();
         public List<Usuario> Usuarios = new List<Usuario>();
+        private static Comparador comparer = new Comparador();
+        public Btree<Producto> ArbolPorNombre = new Btree<Producto>(5, comparer.CompareByName);
+        public Btree<Producto> ArbolPorGenero = new Btree<Producto>(5, comparer.CompareByGenre);
+        public Btree<Producto> ArbolPorALanzamiento = new Btree<Producto>(5, comparer.CompareByYear);
         private int nUsuarios = 0;
 
         public void CargarUsuario(Usuario uTemp_)
