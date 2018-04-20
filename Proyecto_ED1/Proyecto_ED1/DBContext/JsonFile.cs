@@ -35,6 +35,28 @@ namespace Proyecto_ED1.DBContext
 
         }
         /// <summary>
+        /// Guarda en un Archivo Json, el catálogo de Películas para su posterior carga
+        /// </summary>
+        /// <param name="Catálogo"></param>
+        public void MoviesToJson(List<Producto> Catálogo)
+        {
+            try
+            {
+
+                using (StreamWriter file = File.CreateText(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Catálogo.json"))
+                {
+                    var serializer = new JsonSerializer();
+                    serializer.Serialize(file, Catálogo);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        /// <summary>
         /// Convierte una lista de usuarios y los escribe en un archivo Json
         /// </summary>
         /// <param name="user"></param> Lista de usuarios registrados
