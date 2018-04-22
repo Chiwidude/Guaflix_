@@ -8,6 +8,15 @@
 
 <p>
     @Html.ActionLink("WatchList", "WatchList","Proyecto")
+
+    @using (Html.BeginForm("IndexUsuario","Proyecto", FormMethod.Get))
+    {
+     <p>
+         Filtrar por: @Html.DropDownList("filter","ALL")
+         Búsqueda: @Html.TextBox("SBusqueda")
+         <input type= "submit" value="Filter"  />
+     </p>
+    }
 </p>
 <p>
     @Html.ActionLink("Orden por Nombre","OrdenList", new { orden = 0, tipo = 0}) | 

@@ -16,11 +16,6 @@ namespace Proyecto_ED1.Controllers
     public class ProyectoController : Controller
     {
         public DefaultConnection db = DefaultConnection.getInstance;
-        
-        /*Usuario prueba = new Usuario("Angel", "Jimenez", 18, "est1032517", "yomero");
-        Usuario prueba1 = new Usuario("Diego", "Jimenez", 18, "Alejandro", "hermano");
-        Usuario prueba2 = new Usuario("Roberto", "Jimenez", 18, "Angel", "papa");
-        Usuario prueba3 = new Usuario("Oscar", "Jimenez", 18, "Castro", "amigo");*/
         // GET: Proyecto
         public ActionResult IndexUsuario()
         {
@@ -210,17 +205,21 @@ namespace Proyecto_ED1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CargaCatalogo(HttpPostedFileBase file)
         {
-            //Falta poder cargar la ruta del archivo, pero es lo unico por que lo probe poniendosela manual y si genero el arbol y todo
-            string fileJson = System.IO.File.ReadAllText(@"C: \Users\angel\Desktop\MoviesJsonGuaflix.json");
-            List<Producto> Carga = (List<Producto>)JsonConvert.DeserializeObject(fileJson, typeof(List<Producto>));
-            for(int i = 0; i < Carga.Count(); i++)
+            
+            if(file != null)
             {
-                db.ArbolPorNombre.Insertar(Carga[i]);
-                db.ArbolPorGenero.Insertar(Carga[i]);
-                db.ArbolPorALanzamiento.Insertar(Carga[i]);
-                db.Temp_.WatchList.Insertar(Carga[i]);
+                
+                 if (!file.FileName.EndsWith(".json"))
+                {
+                    return View();
+                }
+                 if(file.ContentLength > 0)
+                {
+                    return RedirectToAction("IndexAdministrador");
+                }
             }
-            return RedirectToAction("IndexAdministrador");
+           
+            return View();
         }
 
     }
