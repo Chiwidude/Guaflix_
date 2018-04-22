@@ -215,7 +215,7 @@ namespace Proyecto_ED1.Controllers
                 }
                  if(file.ContentLength > 0)
                 {
-                    var jsonfile = new JsonFile();
+                    var jsonfile = db.File.Value;
 
                     var productos = jsonfile.ProductoList(file.InputStream);
 
@@ -251,7 +251,7 @@ namespace Proyecto_ED1.Controllers
                 }
                 if (file.ContentLength > 0)
                 {
-                    var jsonfile = new JsonFile();
+                    var jsonfile = db.File.Value;
 
                     var Usuarios = jsonfile.UsersToList(file.InputStream);
 
