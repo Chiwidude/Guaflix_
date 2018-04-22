@@ -7,8 +7,9 @@
 <h2>WatchList</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Volver al Catalogo", "IndexUsuario")
 </p>
+
 <table class="table">
     <tr>
         <th>
@@ -41,9 +42,7 @@
             @Html.DisplayFor(modelItem => item.Genero)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+
         </td>
     </tr>
 }

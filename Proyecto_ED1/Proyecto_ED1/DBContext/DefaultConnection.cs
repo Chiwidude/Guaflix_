@@ -22,6 +22,7 @@ namespace Proyecto_ED1.DBContext
         public Btree<Usuario> ArbolUsuarios = new Btree<Usuario>(5, comparer.CompareByName);
         public Usuario Temp_ = new Usuario();
         private int nUsuarios = 0;
+        public int Orden { get; set; }
 
 
         public void CargarUsuario(Usuario uTemp_)

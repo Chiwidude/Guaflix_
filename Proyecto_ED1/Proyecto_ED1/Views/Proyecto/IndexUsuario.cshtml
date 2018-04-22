@@ -9,6 +9,11 @@
 <p>
     @Html.ActionLink("WatchList", "WatchList","Proyecto")
 </p>
+<p>
+    @Html.ActionLink("Orden por Nombre","OrdenList", new { orden = 0, tipo = 0}) | 
+    @Html.ActionLink("Orden por Genero","OrdenList", new { orden = 1, tipo = 0}) | 
+    @Html.ActionLink("Orden por Año","OrdenList", new { orden = 2, tipo = 0})
+</p>
 <table class="table">
     <tr>
         <th>
@@ -41,9 +46,7 @@
             @Html.DisplayFor(modelItem => item.Genero)
         </td>
         <td>
-            @Html.ActionLink("Añadir", "AgregarWatchList", new { _nombre = item.Nombre, _tipo = item.Tipo, _alanzamiento = item.aLanzamiento.ToString(), _genero = item.Genero }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Añadir", "AgregarWatchList", new { _nombre = item.Nombre, _tipo = item.Tipo, _alanzamiento = item.aLanzamiento.ToString(), _genero = item.Genero }) 
         </td>
     </tr>
 }

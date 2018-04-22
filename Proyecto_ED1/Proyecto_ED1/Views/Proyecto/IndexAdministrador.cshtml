@@ -10,6 +10,11 @@
     @Html.ActionLink("Agregar", "CrearProducto","Proyecto") | 
     @Html.ActionLink("Carga desde JSON","CargaCatalogo","Proyecto")
 </p>
+<p>
+    @Html.ActionLink("Orden por Nombre", "OrdenList", new { orden = 0, tipo = 0 }) |
+    @Html.ActionLink("Orden por Genero", "OrdenList", new { orden = 1, tipo = 0 }) |
+    @Html.ActionLink("Orden por Año", "OrdenList", new { orden = 2, tipo = 0 })
+</p>
 <table class="table">
     <tr>
         <th>
@@ -42,9 +47,7 @@
             @Html.DisplayFor(modelItem => item.Genero)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+
         </td>
     </tr>
 }
