@@ -75,11 +75,6 @@ namespace Proyecto_ED1.Controllers
         [HttpPost]
         public ActionResult Login([Bind(Include ="Username,Password")]Models.Usuario usuario)
         {
-            //Solo es de prueba
-            /*db.CargarUsuario(prueba);
-            db.CargarUsuario(prueba1);
-            db.CargarUsuario(prueba2);
-            db.CargarUsuario(prueba3);*/
 
             List<Models.Usuario> Listado = db.ArbolUsuarios.ToList();
 
@@ -124,6 +119,8 @@ namespace Proyecto_ED1.Controllers
                 if (ModelState.IsValid)
                 {
                     db.CargarUsuario(usuario);
+                    var json = db.File.Value;
+                    json.UserToJson(db.ArbolUsuarios.ToList());
                     db.Temp_ = usuario;
                     if (usuario.Administrador)
                         return RedirectToAction("IndexAdministrador");
