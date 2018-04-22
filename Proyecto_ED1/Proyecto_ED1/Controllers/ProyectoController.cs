@@ -16,11 +16,6 @@ namespace Proyecto_ED1.Controllers
     public class ProyectoController : Controller
     {
         public DefaultConnection db = DefaultConnection.getInstance;
-        
-        /*Usuario prueba = new Usuario("Angel", "Jimenez", 18, "est1032517", "yomero");
-        Usuario prueba1 = new Usuario("Diego", "Jimenez", 18, "Alejandro", "hermano");
-        Usuario prueba2 = new Usuario("Roberto", "Jimenez", 18, "Angel", "papa");
-        Usuario prueba3 = new Usuario("Oscar", "Jimenez", 18, "Castro", "amigo");*/
         // GET: Proyecto
         public ActionResult IndexUsuario()
         {
@@ -80,11 +75,6 @@ namespace Proyecto_ED1.Controllers
         [HttpPost]
         public ActionResult Login([Bind(Include ="Username,Password")]Models.Usuario usuario)
         {
-            //Solo es de prueba
-            /*db.CargarUsuario(prueba);
-            db.CargarUsuario(prueba1);
-            db.CargarUsuario(prueba2);
-            db.CargarUsuario(prueba3);*/
 
             List<Models.Usuario> Listado = db.ArbolUsuarios.ToList();
 
@@ -129,6 +119,8 @@ namespace Proyecto_ED1.Controllers
                 if (ModelState.IsValid)
                 {
                     db.CargarUsuario(usuario);
+                    var json = db.File.Value;
+                    json.UserToJson(db.ArbolUsuarios.ToList());
                     db.Temp_ = usuario;
                     if (usuario.Administrador)
                         return RedirectToAction("IndexAdministrador");
@@ -210,17 +202,67 @@ namespace Proyecto_ED1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CargaCatalogo(HttpPostedFileBase file)
         {
-            //Falta poder cargar la ruta del archivo, pero es lo unico por que lo probe poniendosela manual y si genero el arbol y todo
-            string fileJson = System.IO.File.ReadAllText(@"C: \Users\angel\Desktop\MoviesJsonGuaflix.json");
-            List<Producto> Carga = (List<Producto>)JsonConvert.DeserializeObject(fileJson, typeof(List<Producto>));
-            for(int i = 0; i < Carga.Count(); i++)
+            
+            if(file != null)
             {
-                db.ArbolPorNombre.Insertar(Carga[i]);
-                db.ArbolPorGenero.Insertar(Carga[i]);
-                db.ArbolPorALanzamiento.Insertar(Carga[i]);
-                db.Temp_.WatchList.Insertar(Carga[i]);
+                
+                 if (!file.FileName.EndsWith(".json"))
+                {
+                    return View();
+                }
+                 if(file.ContentLength > 0)
+                {
+                    var jsonfile = db.File.Value;
+
+                    var productos = jsonfile.ProductoList(file.InputStream);
+
+                    foreach (Producto p in productos)
+                    {
+                        db.ArbolPorALanzamiento.Insertar(p);
+                        db.ArbolPorGenero.Insertar(p);
+                        db.ArbolPorNombre.Insertar(p);
+                    }
+
+                    return RedirectToAction("IndexAdministrador");
+                }
             }
-            return RedirectToAction("IndexAdministrador");
+           
+            return View();
+        }
+        public ActionResult CargaUsuarios()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CargaUsuarios(HttpPostedFileBase file)
+        {
+
+            if (file != null)
+            {
+
+                if (!file.FileName.EndsWith(".json"))
+                {
+                    return View();
+                }
+                if (file.ContentLength > 0)
+                {
+                    var jsonfile = db.File.Value;
+
+                    var Usuarios = jsonfile.UsersToList(file.InputStream);
+
+                    foreach (Usuario U in Usuarios)
+                    {
+                        db.ArbolUsuarios.Insertar(U);
+                    }
+                     
+
+                    return RedirectToAction("IndexAdministrador");
+                }
+            }
+
+            return View();
         }
 
     }

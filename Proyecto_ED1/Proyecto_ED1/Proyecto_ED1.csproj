@@ -153,6 +153,7 @@
     <Compile Include="Controllers\ProyectoController.cs" />
     <Compile Include="DBContext\Comparador.cs" />
     <Compile Include="DBContext\DefaultConnection.cs" />
+    <Compile Include="DBContext\JsonFile.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
