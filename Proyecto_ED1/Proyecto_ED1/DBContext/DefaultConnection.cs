@@ -12,9 +12,6 @@ namespace Proyecto_ED1.DBContext
     {
         private static volatile DefaultConnection instance;
         private static object sync = new Object();
-
-        public List<Producto> Catalogo = new List<Producto>();
-        
         private static Comparador comparer = new Comparador();
         public Btree<Producto> ArbolPorNombre = new Btree<Producto>(5, comparer.CompareByName);
         public Btree<Producto> ArbolPorGenero = new Btree<Producto>(5, comparer.CompareByGenre);

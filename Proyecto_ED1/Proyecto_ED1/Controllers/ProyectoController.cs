@@ -215,10 +215,56 @@ namespace Proyecto_ED1.Controllers
                 }
                  if(file.ContentLength > 0)
                 {
+                    var jsonfile = new JsonFile();
+
+                    var productos = jsonfile.ProductoList(file.InputStream);
+
+                    foreach (Producto p in productos)
+                    {
+                        db.ArbolPorALanzamiento.Insertar(p);
+                        db.ArbolPorGenero.Insertar(p);
+                        db.ArbolPorNombre.Insertar(p);
+                    }
+
                     return RedirectToAction("IndexAdministrador");
                 }
             }
            
+            return View();
+        }
+        public ActionResult CargaUsuarios()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CargaUsuarios(HttpPostedFileBase file)
+        {
+
+            if (file != null)
+            {
+
+                if (!file.FileName.EndsWith(".json"))
+                {
+                    return View();
+                }
+                if (file.ContentLength > 0)
+                {
+                    var jsonfile = new JsonFile();
+
+                    var Usuarios = jsonfile.UsersToList(file.InputStream);
+
+                    foreach (Usuario U in Usuarios)
+                    {
+                        db.ArbolUsuarios.Insertar(U);
+                    }
+                     
+
+                    return RedirectToAction("IndexAdministrador");
+                }
+            }
+
             return View();
         }
 
