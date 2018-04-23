@@ -65,10 +65,6 @@ namespace Proyecto_ED1.Controllers
         public ActionResult Login()
         {
             db.Orden = 0;
-            if (db.ArbolUsuarios.ToList().Count == 0)
-            {
-                return RedirectToAction("Signin");
-            }
             return View();
         }
 
@@ -76,26 +72,28 @@ namespace Proyecto_ED1.Controllers
         public ActionResult Login([Bind(Include ="Username,Password")]Models.Usuario usuario)
         {
 
-            List<Models.Usuario> Listado = db.ArbolUsuarios.ToList();
+            var Listado = db.ArbolUsuarios.ToList();
 
-            bool Encontrado = false;
+            var Encontrado = false;
             if (usuario.Username != default(string) && usuario.Password != default(string))
             {
-                for (int i = 0; i < Listado.Count; i++)
+                if (usuario.Username == "admin" && usuario.Password == "admin")
                 {
-                    Listado[i].Ingreso(usuario.Username, usuario.Password, ref Encontrado);
-
-                    if (Encontrado == true)
+                    db.Temp_ = db.admin;
+                    return RedirectToAction("IndexAdministrador");
+                } else {
+                    for (int i = 0; i < Listado.Count; i++)
                     {
-                        usuario = Listado[i];
-                        db.Temp_ = usuario;
-                        if (usuario.Administrador)
-                            return RedirectToAction("IndexAdministrador");
-                        else
-                            return RedirectToAction("IndexUsuario");
+                        Listado[i].Ingreso(usuario.Username, usuario.Password, ref Encontrado);
+
+                        if (Encontrado == true)
+                        {
+                            usuario = Listado[i];
+                            db.Temp_ = usuario;
+                                return RedirectToAction("IndexUsuario");
+                        }
                     }
                 }
-
                 
 
                 return View();
@@ -119,13 +117,9 @@ namespace Proyecto_ED1.Controllers
                 if (ModelState.IsValid)
                 {
                     db.CargarUsuario(usuario);
-                    var json = db.File.Value;
-                    json.UserToJson(db.ArbolUsuarios.ToList());
+                    db.file.UserToJson(db.ArbolUsuarios.ToList());
                     db.Temp_ = usuario;
-                    if (usuario.Administrador)
-                        return RedirectToAction("IndexAdministrador");
-                    else
-                        return RedirectToAction("IndexUsuario");
+                    return usuario.Administrador ? RedirectToAction("IndexAdministrador") : RedirectToAction("IndexUsuario");
                 }
             }
 
@@ -180,6 +174,7 @@ namespace Proyecto_ED1.Controllers
                     db.ArbolPorGenero.Insertar(producto);
                     db.ArbolPorALanzamiento.Insertar(producto);
                     db.Temp_.WatchList.Insertar(producto);
+                    db.file.MoviesToJson(db.ArbolPorNombre.ToList());
 
                     return RedirectToAction("IndexAdministrador");
                 }
@@ -212,9 +207,7 @@ namespace Proyecto_ED1.Controllers
                 }
                  if(file.ContentLength > 0)
                 {
-                    var jsonfile = db.File.Value;
-
-                    var productos = jsonfile.ProductoList(file.InputStream);
+                    var productos = db.file.ProductoList(file.InputStream);
 
                     foreach (Producto p in productos)
                     {
@@ -248,9 +241,7 @@ namespace Proyecto_ED1.Controllers
                 }
                 if (file.ContentLength > 0)
                 {
-                    var jsonfile = db.File.Value;
-
-                    var Usuarios = jsonfile.UsersToList(file.InputStream);
+                    var Usuarios = db.file.UsersToList(file.InputStream);
 
                     foreach (Usuario U in Usuarios)
                     {
@@ -264,6 +255,40 @@ namespace Proyecto_ED1.Controllers
 
             return View();
         }
+        public ActionResult CerrarSesión()
+        {
+            db.Temp_ = null;
+            
+              return RedirectToAction("Index", "Home");
+            
+        }
+        public ActionResult Busqueda()
+        {
+            var listaopciones = new List<string>() { "Genero", "Año Lanzamiento", "Nombre" };
+            ViewBag.filter = new SelectList(listaopciones);
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult Busqueda(string filter, string SBusqueda)
+        {
+            var resultado = new List<Producto>();
+            var listaopciones = new List<string>() { "Genero", "Año Lanzamiento", "Nombre" };
+            ViewBag.filter = new SelectList(listaopciones);
+
+            if (!string.IsNullOrEmpty(filter) && !string.IsNullOrEmpty(SBusqueda) && filter.ToUpper() == "GENERO")
+            {
+                 resultado = db.ArbolPorGenero.ToList().FindAll(x => x.Genero == SBusqueda);
+            }
+            if(!string.IsNullOrEmpty(filter) && !string.IsNullOrEmpty(SBusqueda) && filter.ToUpper() == "AÑO LANZAMIENTO")
+            {
+                 resultado = db.ArbolPorALanzamiento.ToList().FindAll(x => x.aLanzamiento == Convert.ToInt32(SBusqueda));
+            }
+            if(!string.IsNullOrEmpty(filter) && !string.IsNullOrEmpty(SBusqueda) && filter.ToUpper() == "NOMBRE")
+            {
+                 resultado = db.ArbolPorNombre.ToList().FindAll(x => x.Nombre == SBusqueda);
+            }
+            return View(resultado);
+        }
     }
 }

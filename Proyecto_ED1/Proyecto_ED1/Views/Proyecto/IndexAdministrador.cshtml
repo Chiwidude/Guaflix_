@@ -7,8 +7,15 @@
 <h2>Index Administrador</h2>
 
 <p>
-    @Html.ActionLink("Agregar", "CrearProducto","Proyecto") | 
-    @Html.ActionLink("Carga desde JSON","CargaCatalogo","Proyecto")
+    <div class="navbar-collapse collapse navbar-right">
+        <ul class="nav navbar-nav">
+            <li>@Html.ActionLink("Cerrar Sesión", "CerrarSesión", "Proyecto")</li>
+
+        </ul>
+    </div>
+    @Html.ActionLink("Agregar", "CrearProducto", "Proyecto") |
+    @Html.ActionLink("Carga desde JSON", "CargaCatalogo", "Proyecto") |
+    @Html.ActionLink("Cargar Usuarios", "CargaUsuarios", "Proyecto")
 </p>
 <p>
     @Html.ActionLink("Orden por Nombre", "OrdenList", new { orden = 0, tipo = 0 }) |

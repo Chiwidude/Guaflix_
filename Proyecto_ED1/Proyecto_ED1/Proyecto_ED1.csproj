@@ -209,6 +209,8 @@
     <Content Include="Views\Proyecto\CrearProducto.cshtml" />
     <Content Include="Views\Proyecto\WatchList.cshtml" />
     <Content Include="Views\Proyecto\AgregarWatchList.cshtml" />
+    <Content Include="Views\Proyecto\CargaUsuarios.cshtml" />
+    <Content Include="Views\Proyecto\Busqueda.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

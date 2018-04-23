@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
 using BTree;
 using Proyecto_ED1.DBContext;
 
@@ -9,6 +10,7 @@ namespace Proyecto_ED1.Models
 {
     public class Usuario
     {
+        [JsonIgnore]
         private static Comparador comparer = new Comparador();
 
         /// <summary>
@@ -42,14 +44,25 @@ namespace Proyecto_ED1.Models
             Password = password;
             WatchList = new Btree<Producto>(5, comparer.CompareByName);
         }
-
+        public Usuario(string nombre, string apellido, int edad, string username, string password, bool Administrador, Btree<Producto> Watchlist)
+        {
+            Nombre = nombre;
+            Apellido = apellido;
+            Edad = edad;
+            Username = username;
+            Password = password;
+            this.Administrador = Administrador;
+            this.WatchList = Watchlist;
+        }
 
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public int Edad { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        [JsonIgnore]
         public bool Administrador { get; set; }
+        [JsonIgnore]
         public Btree<Producto> WatchList { get; set; }
 
         

@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "CargaUsuarios";
+}
+
+<h2>CargaUsuarios</h2>
+@using (Html.BeginForm("CargaUsuarios", "Proyecto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    @Html.TextBox("file", "", new { type = "file" }) <br />
+
+    <input type="submit" value="Subir" />
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

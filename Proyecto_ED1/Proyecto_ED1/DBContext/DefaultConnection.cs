@@ -17,7 +17,8 @@ namespace Proyecto_ED1.DBContext
         public Btree<Producto> ArbolPorGenero = new Btree<Producto>(5, comparer.CompareByGenre);
         public Btree<Producto> ArbolPorALanzamiento = new Btree<Producto>(5, comparer.CompareByYear);
         public Btree<Usuario> ArbolUsuarios = new Btree<Usuario>(5, comparer.CompareByName);
-        public Lazy<JsonFile> File = new Lazy<JsonFile>();
+        public JsonFile file = new JsonFile();
+        public Usuario admin = new Usuario("","",0,"admin","admin");
         public Usuario Temp_ = new Usuario();
         private int nUsuarios = 0;
         public int Orden { get; set; }
@@ -25,11 +26,6 @@ namespace Proyecto_ED1.DBContext
 
         public void CargarUsuario(Usuario uTemp_)
         {
-            if (nUsuarios < 1)
-            {
-                uTemp_.Administrador = true;
-            }
-
             ArbolUsuarios.Insertar(uTemp_);
             nUsuarios++;
         }
