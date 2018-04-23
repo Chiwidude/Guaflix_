@@ -295,7 +295,7 @@ namespace Proyecto_ED1.Controllers
             }
             if(!string.IsNullOrEmpty(filter) && !string.IsNullOrEmpty(SBusqueda) && filter.ToUpper() == "NOMBRE")
             {
-                 resultado = db.ArbolPorNombre.ToList().FindAll(x => x.Nombre == SBusqueda);
+                 resultado = db.ArbolPorNombre.ToList().FindAll(x => x.Nombre.Contains(SBusqueda));
             }
             return View(resultado);
         }
