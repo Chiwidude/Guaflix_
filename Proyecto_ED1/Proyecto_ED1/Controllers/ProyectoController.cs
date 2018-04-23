@@ -90,7 +90,15 @@ namespace Proyecto_ED1.Controllers
                         {
                             usuario = Listado[i];
                             db.Temp_ = usuario;
-                                return RedirectToAction("IndexUsuario");
+                            using (var streamit = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + db.Temp_.Username + "_WatchList.json", FileMode.Open))
+                            {
+                                var Watchlist = db.file.ProductoList(streamit);
+                                foreach(Producto P in Watchlist)
+                                {
+                                    db.Temp_.WatchList.Insertar(P);
+                                }
+                            }
+                            return RedirectToAction("IndexUsuario");
                         }
                     }
                 }
@@ -151,6 +159,7 @@ namespace Proyecto_ED1.Controllers
         {
             Producto producto = new Producto(_tipo, _nombre, Convert.ToInt32(_alanzamiento), _genero);
             db.Temp_.WatchList.Insertar(producto);
+            EscribirJson();
 
             return RedirectToAction("IndexUsuario");
         }
@@ -290,5 +299,24 @@ namespace Proyecto_ED1.Controllers
             }
             return View(resultado);
         }
+        public void EscribirJson()
+        {
+            Session["ArchivoJson"] = string.Empty;
+
+            int elementos = 0;
+            foreach (Producto producto in db.Temp_.WatchList.ToList())
+            {
+                if (elementos == 0)
+                    Session["ArchivoJson"] += JsonConvert.SerializeObject(producto);
+                else
+                    Session["ArchivoJson"] += "," + JsonConvert.SerializeObject(producto);
+
+                elementos++;
+            }
+
+            System.IO.File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +@"\" + db.Temp_.Username + "_WatchList.json", "[" + Session["ArchivoJson"].ToString() + "]");
+
+        }
+
     }
 }
