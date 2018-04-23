@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Proyecto_ED1.Models.Producto>
+
+@{
+    ViewBag.Title = "Busqueda";
+}
+
+<h2>Busqueda</h2>
+
+<p>
+
+    @Html.ActionLink("Regresar", "IndexUsuario", "Proyecto")
+
+    @using (Html.BeginForm())
+    {
+    <p>
+        Filtrar por: @Html.DropDownList("filter", "ALL")
+        Búsqueda: @Html.TextBox("SBusqueda")
+        <input type="submit" value="Filter" />
+    </p>
+
+}
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.aLanzamiento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genero)
+            </th>
+            <th></th>
+        </tr>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aLanzamiento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Genero)
+                    </td>
+                    <td></td>
+                </tr>
+            }
+        }
+
+    </table>
