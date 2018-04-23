@@ -284,7 +284,7 @@ namespace Proyecto_ED1.Controllers
                 elementos++;
             }
 
-            System.IO.File.WriteAllText(@"C:\Users\angel\Desktop\" + db.Temp_.Nombre + ".json", "[" + Session["ArchivoJson"].ToString() + "]");
+            System.IO.File.WriteAllText(@"C:\Users\angel\Desktop\" + db.Temp_.Username + "WatchList.json", "[" + Session["ArchivoJson"].ToString() + "]");
             
         }
 
