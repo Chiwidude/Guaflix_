@@ -256,6 +256,12 @@ namespace BTree
         #endregion
 
         #region Eliminación
+        /// <summary>
+        /// A partir de dos nodos, se combina y se crea un solo nodo
+        /// Se ejecuta cuando se elimina y no se tiene la cantidad mínima de llaves
+        /// </summary>
+        /// <param name="P"></param>
+        /// <param name="K"></param>
         private void Combina(BTNode<T> P, int K)
         {
             int J;
@@ -281,14 +287,20 @@ namespace BTree
             P.Cuenta = P.Cuenta - 1;
 
         }
-
+        /// <summary>
+        /// Desciende la clave K = l del nodo padre P al hijo izquierdo y la inserta en la posición más alta, de esta forma se restablece el mínimo de claves
+        /// Después sube la clave 1 del hermano derecho
+        /// </summary>
+        /// <param name="P"></param>Nodo que antecede al nodo que se está restaurando
+        /// <param name="K"></param>Posición del nodo con menos claves que el mínimo
         private void MoverIzquierda(BTNode<T> P, int K)
         {
+            //P.Children[k-1] nodo con menos claves que el mínimo
             P.Children[K - 1].Cuenta = P.Children[K - 1].Cuenta + 1;
             P.Children[K - 1].Values[P.Children[K - 1].Cuenta] = P.Values[K];
             P.Children[K - 1].Children[P.Children[K - 1].Cuenta] = P.Children[K].Children[0];
 
-            P.Values[K] = P.Children[K].Values[1];
+            P.Values[K] = P.Children[K].Values[1]; //sube al nodo padre la clave 1 del hermano derecho, sustituyendo a la que bajó
             P.Children[K].Children[0] = P.Children[K].Children[1];
             P.Children[K].Cuenta = P.Children[K].Cuenta - 1;
 
@@ -298,9 +310,15 @@ namespace BTree
                 P.Children[K].Children[i] = P.Children[K].Children[i + 1];
             }
         }
-
+        /// <summary>
+        /// En este procedimiento se deja a espacio en el nodo p.Childre[K] que es el nodo que tiene menos claves que el mínimo necesario , 
+        /// inserta la clave k del nodo antecedente y a su vez asciende la clave mayor( la más a la derecha)del hermano izquierdo al nodo <paramref name="P"/>
+        /// </summary>
+        /// <param name="P"></param>Nodo que antecede al nodo que se está restaurando
+        /// <param name="K"></param>Posición del nodo con menos claves que el mínimo
         private void MoverDerecha(BTNode<T> P, int K)
         {
+            //P.Children[k] es nodo con menos claves que el mínimo
             for (int J = P.Children[K].Cuenta; J >= 1; J--)
             {
                 P.Children[K].Values[J + 1] = P.Children[K].Values[J];
@@ -308,18 +326,26 @@ namespace BTree
             }
             P.Children[K].Cuenta = P.Children[K].Cuenta + 1;
             P.Children[K].Children[1] = P.Children[K].Children[0];
-            P.Children[K].Values[1] = P.Values[K];
-
+            P.Children[K].Values[1] = P.Values[K]; // baja la clave del nodo padre
+            //Ahora sube la clave desde el hermano izquierdo al nodo padre, para reemplazar la que antes bajó
+            //{Hermano izquierdo P.Children[k-1]
             P.Values[K] = P.Children[K - 1].Values[P.Children[K - 1].Cuenta];
             P.Children[K].Children[0] = P.Children[K - 1].Children[P.Children[K - 1].Cuenta];
             P.Children[K - 1].Cuenta = P.Children[K - 1].Cuenta - 1;
         }
 
+        /// <summary>
+        /// Restaura el nodo P.Children[k] el cual se queda debajo del mínimo de claves 
+        /// Si tiene hermano izquierdo siempre se trabaja con ese, en caso no tenga se pasa al hermano derecho
+        /// En caso no hay claves se combinan los nodos
+        /// </summary>
+        /// <param name="P"></param> tiene la dirección del nodo antecedente del nodo P.Children[K] que se ha quedado con menos claves que el mínimo
+        /// <param name="K"></param>
         private void Restablecer(BTNode<T> P, int K)
         {
-            if (K > 0)
+            if (K > 0) //Tiene hermano izquierdo
             {
-                if (P.Children[K - 1].Cuenta > Min)
+                if (P.Children[K - 1].Cuenta > Min) //Tiene más claves que el mínimo y por tanto puede desplazarse una clave
                 {
                     MoverDerecha(P, K);
                 }
@@ -328,9 +354,9 @@ namespace BTree
                     Combina(P, K);
                 }
             }
-            else
+            else //solo tiene hermano derecho
             {
-                if (P.Children[1].Cuenta > Min)
+                if (P.Children[1].Cuenta > Min) //Tiene más claves que el mínimo
                 {
                     MoverIzquierda(P, 1);
                 }
@@ -340,7 +366,11 @@ namespace BTree
                 }
             }
         }
-
+        /// <summary>
+        /// En ete método se busca la clave inmediatamente sucesor de la clave K,  y ésta reemplaza a la clave K. 
+        /// </summary>
+        /// <param name="P"></param>Bidi donde se encuentra la clave k
+        /// <param name="K"></param> Posición de la clave
         private void Sucesor(BTNode<T> P, int K)
         {
             BTNode<T> Q;
@@ -352,24 +382,35 @@ namespace BTree
                 P.Values[K] = Q.Values[1];
             }
         }
-
+        /// <summary>
+        /// Elimina la clave junto con la rama que corresponde
+        /// </summary>
+        /// <param name="P"></param>Dirección del nodo
+        /// <param name="K"></param>Posición de la clave a eliminar
         private void Quitar(BTNode<T> P, int K)
         {
             for (int j = K + 1; j <= P.Cuenta; j++)
             {
-                P.Values[j - 1] = P.Values[j];
+                P.Values[j - 1] = P.Values[j];//Desplaza una posición a la izquierda, con que elimina la referencia a la clave
                 P.Children[j - 1] = P.Children[j];
             }
             P.Cuenta = P.Cuenta - 1;
         }
-
+        /// <summary>
+        /// Busca el nodo con la clave a eliminar, si el nodo es hoja se llama al método quitar
+        /// En caso no sea hoja, se encuentra el sucesor inmediato de la clave, se coloca en el nodo donde está la clave, 
+        /// después se elimina la clave sucesor en el nodo hoja
+        /// </summary>
+        /// <param name="Cl"></param>
+        /// <param name="R"></param>
+        /// <param name="Encontrado"></param>
         private void EliminarRegistro(T Cl, BTNode<T> R, ref bool Encontrado)
         {
             var k = 0;
 
             if (ArbolVacio(R))
             {
-                Encontrado = false;
+                Encontrado = false; // se ha recorrido todo el árbol
             }
             else
             {
@@ -377,24 +418,25 @@ namespace BTree
 
                 if (Encontrado)
                 {
-                    if (R.Children[k - 1] == null)
+                    if (R.Children[k - 1] == null) //Las ramas están indexadas desde índice O a Max, por lo que este nodo es hoja
                     {
                         Quitar(R, k);
                     }
-                    else
+                    else // no es  hoja
                     {
-                        Sucesor(R, k);
-                        EliminarRegistro(R.Values[k], R.Children[k], ref Encontrado);
+                        Sucesor(R, k); //{Reemplaza R.claves[K] por su sucesor
+                        EliminarRegistro(R.Values[k], R.Children[k], ref Encontrado);//{Elimina la clave sucesora en su nodo
                         if (!Encontrado)
                         {
                             return;
                         }
                     }
                 }
-                else
+                else //No ha sido localizada la clave
                 {
                     EliminarRegistro(Cl, R.Children[k], ref Encontrado);
-                    if (R.Children[k] != null)
+                    //se comprueba que el nodo hijo mantenga un número de claves igual o mayor que el mínimo necesario
+                    if (R.Children[k] != null) //Condición de que no sea hoja
                     {
                         if (R.Children[k].Cuenta < Min)
                         {
@@ -405,6 +447,11 @@ namespace BTree
             }
         }
 
+        /// <summary>
+        /// Este método se encarga de establecer la nueva raíz en caso se necesite
+        /// </summary>
+        /// <param name="cl"></param>
+        /// <param name="root"></param>
         private void Eliminar(T cl, ref BTNode<T> root)
         {
             var Encontrado = false;

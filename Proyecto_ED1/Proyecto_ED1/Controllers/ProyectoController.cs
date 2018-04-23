@@ -45,17 +45,17 @@ namespace Proyecto_ED1.Controllers
                 db.Orden = orden;
                 if (db.Temp_.Administrador)
                 {
-                    return RedirectToAction("IndexAdministrador");
+                    return RedirectToAction(nameof(IndexAdministrador));
                 }
                 else
                 {
                     if (tipo == 0)
-                        return RedirectToAction("IndexUsuario");
+                        return RedirectToAction(nameof(IndexUsuario));
                     else
-                        return RedirectToAction("WatchList");
+                        return RedirectToAction(nameof(WatchList));
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return View();
             }
@@ -80,7 +80,7 @@ namespace Proyecto_ED1.Controllers
                 if (usuario.Username == "admin" && usuario.Password == "admin")
                 {
                     db.Temp_ = db.admin;
-                    return RedirectToAction("IndexAdministrador");
+                    return RedirectToAction(nameof(IndexAdministrador));
                 } else {
                     for (int i = 0; i < Listado.Count; i++)
                     {
@@ -98,7 +98,7 @@ namespace Proyecto_ED1.Controllers
                                     db.Temp_.WatchList.Insertar(P);
                                 }
                             }
-                            return RedirectToAction("IndexUsuario");
+                            return RedirectToAction(nameof(IndexUsuario));
                         }
                     }
                 }
@@ -127,7 +127,7 @@ namespace Proyecto_ED1.Controllers
                     db.CargarUsuario(usuario);
                     db.file.UserToJson(db.ArbolUsuarios.ToList());
                     db.Temp_ = usuario;
-                    return usuario.Administrador ? RedirectToAction("IndexAdministrador") : RedirectToAction("IndexUsuario");
+                    return usuario.Administrador ? RedirectToAction(nameof(IndexAdministrador)) : RedirectToAction(nameof(IndexUsuario));
                 }
             }
 
@@ -161,7 +161,7 @@ namespace Proyecto_ED1.Controllers
             db.Temp_.WatchList.Insertar(producto);
             EscribirJson();
 
-            return RedirectToAction("IndexUsuario");
+            return RedirectToAction(nameof(IndexUsuario));
         }
         
 
@@ -185,7 +185,7 @@ namespace Proyecto_ED1.Controllers
                     db.Temp_.WatchList.Insertar(producto);
                     db.file.MoviesToJson(db.ArbolPorNombre.ToList());
 
-                    return RedirectToAction("IndexAdministrador");
+                    return RedirectToAction(nameof(IndexAdministrador));
                 }
 
                 return RedirectToAction("Index");
@@ -225,7 +225,7 @@ namespace Proyecto_ED1.Controllers
                         db.ArbolPorNombre.Insertar(p);
                     }
 
-                    return RedirectToAction("IndexAdministrador");
+                    return RedirectToAction(nameof(IndexAdministrador));
                 }
             }
            
@@ -303,7 +303,7 @@ namespace Proyecto_ED1.Controllers
         {
             Session["ArchivoJson"] = string.Empty;
 
-            int elementos = 0;
+            var elementos = 0;
             foreach (Producto producto in db.Temp_.WatchList.ToList())
             {
                 if (elementos == 0)
