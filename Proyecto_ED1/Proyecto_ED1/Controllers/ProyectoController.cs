@@ -79,6 +79,7 @@ namespace Proyecto_ED1.Controllers
             {
                 if (usuario.Username == "admin" && usuario.Password == "admin")
                 {
+                    db.admin.Administrador = true;
                     db.Temp_ = db.admin;
                     return RedirectToAction(nameof(IndexAdministrador));
                 } else {
