@@ -211,6 +211,7 @@
     <Content Include="Views\Proyecto\AgregarWatchList.cshtml" />
     <Content Include="Views\Proyecto\CargaUsuarios.cshtml" />
     <Content Include="Views\Proyecto\Busqueda.cshtml" />
+    <Content Include="Views\Proyecto\DeleteAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

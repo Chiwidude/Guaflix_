@@ -54,7 +54,7 @@
             @Html.DisplayFor(modelItem => item.Genero)
         </td>
         <td>
-
+            @Html.ActionLink("Eliminar","DeleteAdmin", new { _nombre = item.Nombre, _tipo = item.Tipo, _alanzamiento = item.aLanzamiento.ToString(), _genero = item.Genero })
         </td>
     </tr>
 }

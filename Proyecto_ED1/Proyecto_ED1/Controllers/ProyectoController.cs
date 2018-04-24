@@ -319,5 +319,39 @@ namespace Proyecto_ED1.Controllers
 
         }
 
+        public ActionResult DeleteAdmin(string _nombre, string _tipo, string _alanzamiento, string _genero)
+        {
+            var aeliminar = new Producto(_tipo, _nombre, Convert.ToInt32(_alanzamiento), _genero);
+            var encontrado = db.ArbolPorNombre.ToList().Find(x => x.Nombre == aeliminar.Nombre);
+
+            if(encontrado == null)
+            {
+                TempData["msg"] = "<script>alert('DATO NO ENCONTRADO');</script>";
+            }
+            return View(encontrado);
+        }
+
+        [HttpPost,ActionName(nameof(DeleteAdmin))]
+        [ValidateAntiForgeryToken]
+
+        public ActionResult DeleteConfirmed(string _nombre, string _tipo, string _alanzamiento, string _genero)
+        {
+            var aeliminar = new Producto(_tipo, _nombre, Convert.ToInt32(_alanzamiento), _genero);
+            try
+            {
+                db.ArbolPorALanzamiento.Eliminar(aeliminar, db.ArbolPorALanzamiento.root);
+                db.ArbolPorGenero.Eliminar(aeliminar, db.ArbolPorGenero.root);
+                db.ArbolPorNombre.Eliminar(aeliminar, db.ArbolPorNombre.root);
+                db.file.MoviesToJson(db.ArbolPorNombre.ToList());
+                return RedirectToAction(nameof(IndexAdministrador));
+
+            }
+            catch (Exception)
+            {
+                return View();
+            }
+        }
+
+        
     }
 }
