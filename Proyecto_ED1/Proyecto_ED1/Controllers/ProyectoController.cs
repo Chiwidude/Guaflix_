@@ -91,14 +91,14 @@ namespace Proyecto_ED1.Controllers
                         {
                             usuario = Listado[i];
                             db.Temp_ = usuario;
-                            using (var streamit = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + db.Temp_.Username + "_WatchList.json", FileMode.Open))
+                            /*using (var streamit = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + db.Temp_.Username + "_WatchList.json", FileMode.Open))
                             {
                                 var Watchlist = db.file.ProductoList(streamit);
                                 foreach(Producto P in Watchlist)
                                 {
                                     db.Temp_.WatchList.Insertar(P);
                                 }
-                            }
+                            }*/
                             return RedirectToAction(nameof(IndexUsuario));
                         }
                     }
